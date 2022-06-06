@@ -18,7 +18,7 @@ The best way to build EEs is relying on a new tool provided by [Red Hat® Ansibl
 In this article we will be working with two code repositories:
 
 * <https://github.com/jtudelag/ansible-execution-environments/tree/v0.1>: Ansible execution environment code can be found here.
-* <https://github.com/jtudelag/ansible-ee-gitops/tree/v0.1>: OpenShift Pipelines (Tekton) manifests can be found here.
+* <https://github.com/jtudelag/ansible-ee-gitops/tree/v0.2>: OpenShift Pipelines (Tekton) manifests can be found here.
 
 The idea is that every time we make a change to the Ansible EE repo, this will trigger the OpenShift Pipeline to build and push the EE to our registry, in this case [quay.io](https://quay.io/).
 
@@ -31,7 +31,9 @@ We need to clone the repo with the OpenShift Pipelines manifests, and apply them
 **NOTE:**
 As this example is consuming images from [registry.redhat.io](https://registry.redhat.io) and pushing to [quay.io](https://quay.io), I recommend you use your [Red Hat pull secret](https://console.redhat.com/openshift/install/pull-secret). You can get it from [console.redhat.com](https://console.redhat.com).
 
-Let's create the project `ansible-ees` and the secrets. 
+**NOTE:** For the sake of security, the secrets are not included in the repo, hence they need to be created manually.
+
+Let's create the project `ansible-ees` and the secrets.
 
 First create the project.
 ```bash
@@ -73,8 +75,6 @@ EOF
 
 oc -n ansible-ees apply -f github-secret.yaml
 ```
-
-**NOTE:** For the sake of security, the secrets are not included in the repo, hence they need to be created manually.
 
 ## Apply the ansible-builder Tekton Task
 
