@@ -13,7 +13,7 @@ Let's start by understanding EEs:
 
 >They provide a defined, consistent, and portable environment for executing automation, and allow for easier administration of Ansible Automation Platform by the platform administrator.
 
-The best way to build EEs is relying on a new tool provided by [Red Hat® Ansible® Automation Platform](https://www.redhat.com/en/technologies/management/ansible), the [ansible-builder cli](https://www.ansible.com/blog/introduction-to-ansible-builder). In order to automate the build of EEs, we are make use of [OpenShift Pipelines](https://docs.openshift.com/container-platform/4.10/cicd/pipelines/understanding-openshift-pipelines.html) as well.
+The best way to build EEs is relying on a new tool provided by [Red Hat® Ansible® Automation Platform](https://www.redhat.com/en/technologies/management/ansible), the [ansible-builder cli](https://www.ansible.com/blog/introduction-to-ansible-builder). In order to automate the build of EEs, we make use of [OpenShift Pipelines](https://docs.openshift.com/container-platform/4.10/cicd/pipelines/understanding-openshift-pipelines.html) as well.
 
 In this article we will be working with two code repositories:
 
