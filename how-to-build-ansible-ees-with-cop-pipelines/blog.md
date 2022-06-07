@@ -4,7 +4,7 @@ At [Red Hat Consulting](https://www.redhat.com/en/services/consulting) we help c
 
 Based on that premise, at Red Hat Consulting we have different consulting offerings such as the [Automation Adoption Journey](https://www.redhat.com/en/resources/services-journey-automation-adoption-brief) or the [Open Innovation Labs Residency](https://www.redhat.com/en/services/consulting/open-innovation-labs) that focus on outcomes and not outputs, aligning the technical solution with the customer business needs.
 
-In order to reach the full potential of the solution built, we rely on practices from the Agile world, Devops, Product Development or Domain Driven Design, all of them curated in the [Open Practice Library](https://openpracticelibrary.com/).
+We rely on practices from the Agile world, Devops, Product Development or Domain Driven Design, all of them curated in the [Open Practice Library](https://openpracticelibrary.com/), to achieve the desired outcomes.
 
 In this article we are going to explain how to build [Ansible automation execution environments (EEs)](https://www.redhat.com/en/technologies/management/ansible/automation-execution-environments) automatically, based on different practices such as [everything as code](https://openpracticelibrary.com/practice/everything-as-code/) and [continuous integration](https://openpracticelibrary.com/practice/continuous-integration/) on top of OpenShift.
 
@@ -13,7 +13,7 @@ Let's start by understanding EEs:
 
 >They provide a defined, consistent, and portable environment for executing automation, and allow for easier administration of Ansible Automation Platform by the platform administrator.
 
-The best way to build EEs is relying on a new tool provided by [Red Hat® Ansible® Automation Platform](https://www.redhat.com/en/technologies/management/ansible), the [ansible-builder cli](https://www.ansible.com/blog/introduction-to-ansible-builder). In order to automate the build of EEs, we are going to rely as well on [OpenShift Pipelines](https://docs.openshift.com/container-platform/4.10/cicd/pipelines/understanding-openshift-pipelines.html).
+The best way to build EEs is relying on a new tool provided by [Red Hat® Ansible® Automation Platform](https://www.redhat.com/en/technologies/management/ansible), the [ansible-builder cli](https://www.ansible.com/blog/introduction-to-ansible-builder). In order to automate the build of EEs, we are make use of [OpenShift Pipelines](https://docs.openshift.com/container-platform/4.10/cicd/pipelines/understanding-openshift-pipelines.html) as well.
 
 In this article we will be working with two code repositories:
 
@@ -24,21 +24,21 @@ The idea is that every time we make a change to the Ansible EE repo, this will t
 
 # Applying OpenShift Pipelines Manifests
 
-We need to clone the repo with the OpenShift Pipelines manifests, and apply them to the OpenShift cluster. But first we need to create the secrets to pull & push images to the registries and the Github webhook secret.
+We need to clone the OpenShift Pipelines manifests repo and apply them to the OpenShift cluster. But first we need to create the secrets to pull & push images to the registries and the Github webhook secret.
 
 ## Create Secrets
 
 **NOTE:**
 As this example is consuming images from [registry.redhat.io](https://registry.redhat.io) and pushing to [quay.io](https://quay.io), I recommend you use your [Red Hat pull secret](https://console.redhat.com/openshift/install/pull-secret). You can get it from [console.redhat.com](https://console.redhat.com).
 
-For the sake of security, the secrets are not included in the repo, hence they need to be created manually.
+For the sake of security, the secrets are not included in the repo, we need to create them manually.
 
 First create the project.
 ```bash
 oc new-project ansible-ees
 ```
 
-Create pull & push secret. Replace the secret data with your registry credentials!.
+Then create the pull & push secret. Replace the secret data with your registry credentials!.
 ```bash
 cat << EOF > pull-and-push-secret.yaml
 apiVersion: v1
