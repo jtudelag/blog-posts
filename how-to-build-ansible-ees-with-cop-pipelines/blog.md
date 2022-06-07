@@ -161,7 +161,7 @@ Got to the [EE code repository](https://github.com/jtudelag/ansible-execution-en
 
 # Creating Github Webhook
 
-As we want to automate the whole process, we are relying on the [Trigger & Listener](https://cloud.redhat.com/blog/guide-to-openshift-pipelines-part-6-triggering-pipeline-execution-from-github) capabilities of OpenShift Pipelines. Every time we commit something to the forked EE repo in github, this will trigger a webhook that will call the EventListener and trigger the Pipeline with the right parameters, some of them extracted from the webhook payload.
+As we want to automate the whole process, we are relying on the [Trigger & Listener](https://cloud.redhat.com/blog/guide-to-openshift-pipelines-part-6-triggering-pipeline-execution-from-github) capabilities of OpenShift Pipelines. Every time we commit something to the forked EE repo in Github, this will trigger a webhook that will call the EventListener and trigger the Pipeline with the right parameters, some of them extracted from the webhook payload.
 
 ![Tekton EventListener](images/9-tekton-event-listener.png)
 
