@@ -40,7 +40,7 @@ First create the project.
 oc new-project ansible-ees
 ```
 
-Create pull & push secret. Replace the secret data with your registry credential!.
+Create pull & push secret. Replace the secret data with your registry credentials!.
 ```bash
 cat << EOF > pull-and-push-secret.yaml
 apiVersion: v1
@@ -87,7 +87,7 @@ oc -n ansible-ees apply -f https://raw.githubusercontent.com/tektoncd/catalog/ma
 
 ## Apply Pipeline Manifests
 
-Now we can clone the repo and apply the Pipeline manifests.
+Now we can clone the Pipeline manifests repo and apply them to the cluster.
 ```bash
 git clone --branch v0.2 https://github.com/jtudelag/ansible-ee-gitops.git
 
@@ -142,7 +142,7 @@ listener/
 
 # Fork the EE Code Repository
 
-Got to the [EE code repository](https://github.com/jtudelag/ansible-execution-environments) and fork it, so then you can change the repository settings, like creating new webhooks.
+Got to the [EE code repository](https://github.com/jtudelag/ansible-execution-environments) and fork it, so then you can change the repository webhook settings.
 
 ![Fork repository](images/8-github-fork-ee-code.png)
 
@@ -152,7 +152,7 @@ As we want to automate the whole process, we are relying on the [Trigger & Liste
 
 We need to configure such a webhook in Github to point to the url of the EventListener. We can check the EventListener route url in either the OpenShift console or directly via cli.
 
-You can get the EventListener route URL with the following command:
+You can get the EventListener route URL with the following command via `oc` cli:
 ```bash
 oc -n ansible-ees get route ansible-ee-el -o jsonpath="{.spec.host}"
 ```
@@ -165,7 +165,7 @@ Set the following settings:
 
 * Payload URL: EventListener URL obtained above. Don't forget to add http or https to it.
 * Content type: application/json
-* Secret: Set accordingly to the OpenShift secret referenced in the Trigger object. In this case is a dummy "123" string.
+* Secret: Set it accordingly to the OpenShift secret referenced in the Trigger object. In this case is a dummy "123" string.
 
 ![Github webhook](images/1-webhook-gh.png)
 
@@ -205,16 +205,16 @@ We can see that the commit id `4242b3f` matches the tag of the image built and p
 
 ![Pipeline logs](images/5-pipeline-logs.png)
 
-We can also see that the `latest` tag has been updated in as well in [quay.io](https://quay.io/repository/jtudelag/ansible-ee-test?tab=tags).
+We can also see that the `latest` tag has been updated as well in [quay.io](https://quay.io/repository/jtudelag/ansible-ee-test?tab=tags).
 
 ![Quay.io](images/6-quay-tags.png)
 
-Finally we can verify the PipelineRun has succeeded, meaning all the tasks of the Pipeline finished ok!
+Finally we can go the Openshift console and verify the PipelineRun has succeeded, meaning all the tasks of the Pipeline finished ok!
 
 ![Pipeline ok](images/7-pipeline-ok.png)
 
 # Conclusion
 
-In this article we have demonstrated how you can leverage OpenShift & Ansible capabilities to…..[put sth together here]
+In this article we have demonstrated how Red Hat Consulting can help you make the most out of Red Hat products like OpenShift & Ansible to achieve your business outcomes leveraging on the curated set of open practices of the [Open Practice Library](https://openpracticelibrary.com/).
 
 Ask an expert! Need help to get it done faster together? Contact [hello-labs-emea@redhat.com](hello-labs-emea@redhat.com).
