@@ -191,7 +191,7 @@ git clone https://github.com/<YOUR_FORK>/ansible-execution-environments.git
 
 cd ansible-execution-environments
 
-git commit --allow-empty -m "this is an empty commit"
+git commit --allow-empty -m "Empty commit, trigger the pipeline!"
 
 git push origin main
 ```
@@ -218,6 +218,6 @@ Finally we can go the Openshift console and verify the PipelineRun has succeeded
 
 # Conclusion
 
-In this article we have demonstrated how Red Hat Consulting can help you make the most out of Red Hat products like OpenShift & Ansible to achieve your business outcomes leveraging on the curated set of [Open Practice Library](https://openpracticelibrary.com/) practices.
+In this article we have demonstrated how Red Hat Consulting can help you make the most out of Red Hat products like Red Hat® Ansible® Automation Platform and Red Hat® OpenShift® to achieve your business outcomes leveraging on the curated set of [Open Practices](https://openpracticelibrary.com/).
 
 Ask an expert! Need help to get it done faster together? Contact [hello-labs-emea@redhat.com](hello-labs-emea@redhat.com).
