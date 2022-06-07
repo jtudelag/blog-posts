@@ -212,7 +212,7 @@ We can also see that the `latest` tag has been updated as well in [quay.io](http
 
 ![Quay.io](images/6-quay-tags.png)
 
-Finally we can go the Openshift console and verify the PipelineRun has succeeded, meaning all the tasks of the Pipeline finished ok!
+Finally we can go to the Openshift console and verify the PipelineRun has succeeded, meaning all the tasks of the Pipeline finished ok!
 
 ![Pipeline ok](images/7-pipeline-ok.png)
 
