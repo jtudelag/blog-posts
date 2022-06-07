@@ -6,7 +6,7 @@ Based on that premise, at Red Hat Consulting we have different consulting offeri
 
 In order to reach the full potential of the solution built, we rely on practices from the Agile world, Devops, Product Development or Domain Driven Design, all of them curated in the [Open Practice Library](https://openpracticelibrary.com/).
 
-In this article we are going to explain how to build [Ansible automation execution environments (EEs)](https://www.redhat.com/en/technologies/management/ansible/automation-execution-environments) automatically based on different practices such as [everything as code](https://openpracticelibrary.com/practice/everything-as-code/) and [continuous integration](https://openpracticelibrary.com/practice/continuous-integration/) on top of OpenShift.
+In this article we are going to explain how to build [Ansible automation execution environments (EEs)](https://www.redhat.com/en/technologies/management/ansible/automation-execution-environments) automatically, based on different practices such as [everything as code](https://openpracticelibrary.com/practice/everything-as-code/) and [continuous integration](https://openpracticelibrary.com/practice/continuous-integration/) on top of OpenShift.
 
 Let's start by understanding EEs:
 > Automation execution environments are container images on which all automation in Red Hat® Ansible® Automation Platform is run.
@@ -24,16 +24,14 @@ The idea is that every time we make a change to the Ansible EE repo, this will t
 
 # Applying OpenShift Pipelines Manifests
 
-We need to clone the repo with the OpenShift Pipelines manifests, and apply them to your OpenShift cluster. But first we need to create the secrets to pull & push images to the registries and the Github webhook secret.
+We need to clone the repo with the OpenShift Pipelines manifests, and apply them to the OpenShift cluster. But first we need to create the secrets to pull & push images to the registries and the Github webhook secret.
 
 ## Create Secrets
 
 **NOTE:**
 As this example is consuming images from [registry.redhat.io](https://registry.redhat.io) and pushing to [quay.io](https://quay.io), I recommend you use your [Red Hat pull secret](https://console.redhat.com/openshift/install/pull-secret). You can get it from [console.redhat.com](https://console.redhat.com).
 
-**NOTE:** For the sake of security, the secrets are not included in the repo, hence they need to be created manually.
-
-Let's create the project `ansible-ees` and the secrets.
+For the sake of security, the secrets are not included in the repo, hence they need to be created manually.
 
 First create the project.
 ```bash
@@ -80,7 +78,7 @@ oc -n ansible-ees apply -f github-secret.yaml
 
 The `ansible-builder` Tekton task has been contributed upstream and can be found in [Tekton Hub](https://hub.tekton.dev/tekton/task/ansible-builder).
 
-Apply it to the cluster to the `ansible-ees` namespace.
+Apply it to the cluster in the `ansible-ees` namespace.
 ```bash
 oc -n ansible-ees apply -f https://raw.githubusercontent.com/tektoncd/catalog/main/task/ansible-builder/0.1/ansible-builder.yaml
 ```
@@ -96,7 +94,7 @@ cd ansible-ee-gitops
 
 Edit the Trigger Template `listener/4-trigger-template.yaml` and change the PipelineRun `NAME` parameter to set the image repository name.
 
-**NOTE:** Remember the image parameter `TAG` is extracted from the webhook payload, so don't need to touch it.
+**NOTE:** Remember the parameter `TAG` is extracted from the webhook payload, so don't need to touch it.
 
 ```yaml
 - apiVersion: tekton.dev/v1beta1
@@ -115,7 +113,7 @@ Edit the Trigger Template `listener/4-trigger-template.yaml` and change the Pipe
       value: XXXXXXXXXX
 ```
 
-Apply the manifest.
+Apply the manifests.
 ```bash
 oc -n ansible-ees apply -f listener/
 
@@ -215,6 +213,6 @@ Finally we can go the Openshift console and verify the PipelineRun has succeeded
 
 # Conclusion
 
-In this article we have demonstrated how Red Hat Consulting can help you make the most out of Red Hat products like OpenShift & Ansible to achieve your business outcomes leveraging on the curated set of open practices of the [Open Practice Library](https://openpracticelibrary.com/).
+In this article we have demonstrated how Red Hat Consulting can help you make the most out of Red Hat products like OpenShift & Ansible to achieve your business outcomes leveraging on the curated set of [Open Practice Library](https://openpracticelibrary.com/) practices.
 
 Ask an expert! Need help to get it done faster together? Contact [hello-labs-emea@redhat.com](hello-labs-emea@redhat.com).
