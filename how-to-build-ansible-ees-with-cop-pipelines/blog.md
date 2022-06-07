@@ -22,6 +22,8 @@ In this article we will be working with two code repositories:
 
 The idea is that every time we make a change to the Ansible EE repo, this will trigger the OpenShift Pipeline to build and push the EE to our registry, in this case [quay.io](https://quay.io/).
 
+**NOTE:** Please check [Trigger Pipeline Execution From GitHub](https://cloud.redhat.com/blog/guide-to-openshift-pipelines-part-6-triggering-pipeline-execution-from-github) article for more details on how OpenShift Pipelines works.
+
 # Applying OpenShift Pipelines Manifests
 
 We need to clone the OpenShift Pipelines manifests repo and apply them to the OpenShift cluster. But first we need to create the secrets to pull & push images to the registries and the Github webhook secret.
@@ -113,7 +115,7 @@ Edit the Trigger Template `listener/4-trigger-template.yaml` and change the Pipe
       value: XXXXXXXXXX
 ```
 
-Apply the manifests.
+Apply the Pipeline related manifests.
 ```bash
 oc -n ansible-ees apply -f listener/
 
@@ -138,6 +140,19 @@ listener/
 └── 7-el-route.yaml
 ```
 
+Basically we have created the [Tekton Pipeline](https://tekton.dev/docs/pipelines/) and the [Trigger & EventListener](https://tekton.dev/docs/triggers/) objects to be able to trigger the Pipeline on certain events, usually webhooks.
+
+The [pipeline](https://github.com/jtudelag/ansible-ee-gitops/blob/v0.2/listener/2-pipeline-ansible-builder.yaml) is very simple, it contains just four steps (tasks):
+
+1. Fetch code.
+2. Build EE context with the ansible-builder tool. (using `ansible-builder` Tekton Hub task)
+3. Build and push the container image tagged with the commit `SHA256` id.
+4. Build and push the container image tagged with `latest`.
+
+We can visually check the Pipeline details in the OpenShift console.
+
+![Pipeline](images/2-pipeline-ocp-console.png)
+
 # Fork the EE Code Repository
 
 Got to the [EE code repository](https://github.com/jtudelag/ansible-execution-environments) and fork it, so then you can change the repository webhook settings.
@@ -146,11 +161,11 @@ Got to the [EE code repository](https://github.com/jtudelag/ansible-execution-en
 
 # Creating Github Webhook
 
-As we want to automate the whole process, we are relying on the [Trigger & Listener](https://cloud.redhat.com/blog/guide-to-openshift-pipelines-part-6-triggering-pipeline-execution-from-github) capabilities of OpenShift Pipelines. Every time we commit something to the forked EE repo, this will trigger a Github webhook that will call the EventListener and trigger the Pipeline with the right parameters, some of them extracted from the webhook payload.
+As we want to automate the whole process, we are relying on the [Trigger & Listener](https://cloud.redhat.com/blog/guide-to-openshift-pipelines-part-6-triggering-pipeline-execution-from-github) capabilities of OpenShift Pipelines. Every time we commit something to the forked EE repo in github, this will trigger a webhook that will call the EventListener and trigger the Pipeline with the right parameters, some of them extracted from the webhook payload.
 
-We need to configure such a webhook in Github to point to the url of the EventListener. We can check the EventListener route url in either the OpenShift console or directly via cli.
+![Tekton EventListener](images/9-tekton-event-listener.png)
 
-You can get the EventListener route URL with the following command via `oc` cli:
+We need to configure such a webhook in Github to point to the URL of the EventListener. We can get the EventListener route URL running the following command.
 ```bash
 oc -n ansible-ees get route ansible-ee-el -o jsonpath="{.spec.host}"
 ```
@@ -167,17 +182,7 @@ Set the following settings:
 
 ![Github webhook](images/1-webhook-gh.png)
 
-Now, we just need to make a commit to the forked EE code repo and see how the pipeline is being triggered. The [pipeline](https://github.com/jtudelag/ansible-ee-gitops/blob/v0.2/listener/2-pipeline-ansible-builder.yaml) is very simple, it contains just four steps (tasks):
-
-1. Fetch code.
-2. Build EE context with the ansible-builder tool.
-3. Build and push the container image tagged with the commit `SHA256` id.
-4. Build and push the container image tagged with `latest`.
-
-We can visually check the Pipeline details in the OpenShift console.
-
-![Pipeline](images/2-pipeline-ocp-console.png)
-
+Now we just need to make a commit to the forked EE code repo and see how the pipeline is being triggered ;).
 # Triggering the Pipeline on every commit
 
 We can easily simulate a change in the code by committing a empty change to your forked repo:
@@ -191,7 +196,7 @@ git commit --allow-empty -m "this is an empty commit"
 git push origin main
 ```
 
-This will trigger the Pipeline and as result produce a PipelineRun object, which is an instance of a Pipeline properly parametrized with all the input parameters required.
+This will trigger the Pipeline and as result produce a [PipelineRun](https://tekton.dev/docs/pipelines/pipelineruns/) object, which is an instance of a Pipeline properly parametrized with all the input parameters required.
 
 ![Pipeline running](images/3-pipeline-running.png)
 
